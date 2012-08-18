@@ -29,12 +29,11 @@ public class ContactosTelefono {
 	
 	
 	public HashMap<String, ContactInfo> getContactos(){
-		//HashMap<String, Long> contactos = new HashMap<String, Long>();
+
 		HashMap<String, ContactInfo> listaContactos = new HashMap<String, ContactInfo>();
-		// abrimos cursor para búsqueda de datos de contactos
-		
+		// abrimos cursor para búsqueda de datos de contactos	
 		Uri uri=ContactsContract.Contacts.CONTENT_URI;
-		//ContentResolver cr=getContentResolver();
+		// ordenamos por el campo nombre, alfabéticamente
 		String sortOrder = ContactsContract.Contacts.DISPLAY_NAME + " COLLATE LOCALIZED ASC";
 		Cursor cur=cr.query(uri, null, null, null, sortOrder);
 
@@ -43,45 +42,44 @@ public class ContactosTelefono {
 			String id;
 			String name;
 			String photoId;
-			//String phoneNum;
+			// iteramos por los contactos
 			while(cur.moveToNext()){
 
 				
 				ContactInfo c =new ContactInfo(cr);
 				id = cur.getString(cur.getColumnIndex(ContactsContract.PhoneLookup._ID));
-				
+				// abrimos un cursor para ver los números de teléfono que tenga el contacto actual
 				 Cursor phones = cr.query(Phone.CONTENT_URI, null,
 				            Phone.CONTACT_ID + " = " + id, null, null);
+				 ContactInfo ci = new ContactInfo(cr);
+		         name = cur.getString(cur.getColumnIndex(ContactsContract.PhoneLookup.DISPLAY_NAME));
+		         photoId = cur.getString(cur.getColumnIndex(ContactsContract.PhoneLookup.PHOTO_ID));
+ 				 c.setId( Long.valueOf(id) );
+ 				 c.setDisplayName(name);
+ 				if (photoId != null){
+					c.setPhotoId( Long.valueOf(photoId + "") );
+					Uri contactPhotoUri = ContentUris.withAppendedId(Contacts.CONTENT_URI, c.getId());
+					c.setPhotoUri(contactPhotoUri);	
+				}
+ 				 
 				 while (phones.moveToNext()) {
 			            String number = phones.getString(phones.getColumnIndex(Phone.NUMBER));
 			            int type = phones.getInt(phones.getColumnIndex(Phone.TYPE));
+			            
+			            
 			            switch (type) {
 			                case Phone.TYPE_HOME:
-			                    // do something with the Home number here...
+			                    c.setHomePhoneNumber(number);
 			                    break;
 			                case Phone.TYPE_MOBILE:
-			                    // do something with the Mobile number here...
-			                	ContactInfo ci = new ContactInfo(cr);
-			                	name = cur.getString(cur.getColumnIndex(ContactsContract.PhoneLookup.DISPLAY_NAME));
-			    				photoId = cur.getString(cur.getColumnIndex(ContactsContract.PhoneLookup.PHOTO_ID));
-			    				c.setId( Long.valueOf(id) );
-			    				c.setDisplayName(name);
-			    				c.setPhoneNumber(number);
-			    				if (photoId != null){
-			    					c.setPhotoId( Long.valueOf(photoId + "") );
-			    					Uri contactPhotoUri = ContentUris.withAppendedId(Contacts.CONTENT_URI, c.getId());
-			    					c.setPhotoUri(contactPhotoUri);
-			    					
-			    					
-			    				}
-			    				listaContactos.put(name, c);
-			    				Log.d(LOGTAG, "contactos móvil: " + number );
+			    				c.setMobilePhoneNumber(number);
 			                    break;
 			                case Phone.TYPE_WORK:
-			                    // do something with the Work number here...
+			                    c.setWorkPhoneNumber(number);
 			                    break;
 			                }
 			        }
+				 listaContactos.put(name, c);
 			        phones.close();
 				
 				//phoneNum= cur.getString(cur.getColumnIndex(ContactsContract.PhoneLookup.NUMBER));

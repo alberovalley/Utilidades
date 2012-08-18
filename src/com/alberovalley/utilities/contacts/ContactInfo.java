@@ -13,7 +13,10 @@ public class ContactInfo {
 	
 	private long id;
     private String displayName;
-    private String phoneNumber;
+    private String homePhoneNumber;
+    private String mobilePhoneNumber;
+    private String workPhoneNumber;
+    
     private long photoId;
     private Uri photoUri;
     private ContentResolver cr;
@@ -22,6 +25,9 @@ public class ContactInfo {
     public ContactInfo(ContentResolver contR) {
 		super();
 		this.cr = contR;
+		this.workPhoneNumber="";
+		this.homePhoneNumber="";
+		this.mobilePhoneNumber="";
 	}
 
 	public void setDisplayName(String displayName) {
@@ -32,15 +38,33 @@ public class ContactInfo {
         return displayName;
     }
 
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
-    }
+   
 
-    public String getPhoneNumber() {
-        return phoneNumber;
-    }
+    public String getHomePhoneNumber() {
+		return homePhoneNumber;
+	}
 
-    public Uri getPhotoUri() {
+	public void setHomePhoneNumber(String homePhoneNumber) {
+		this.homePhoneNumber = homePhoneNumber;
+	}
+
+	public String getMobilePhoneNumber() {
+		return mobilePhoneNumber;
+	}
+
+	public void setMobilePhoneNumber(String mobilePhoneNumber) {
+		this.mobilePhoneNumber = mobilePhoneNumber;
+	}
+
+	public String getWorkPhoneNumber() {
+		return workPhoneNumber;
+	}
+
+	public void setWorkPhoneNumber(String workPhoneNumber) {
+		this.workPhoneNumber = workPhoneNumber;
+	}
+
+	public Uri getPhotoUri() {
         return this.photoUri;
     }
 
