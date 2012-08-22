@@ -11,6 +11,14 @@ import android.provider.ContactsContract.Contacts;
 
 public class ContactInfo {
 	
+	public static final String ID = "id";
+	public static final String DISPLAY_NAME = "displayName";
+	public static final String MOBILE = "mobilePhoneNumber";
+	public static final String HOME = "homePhoneNumber";
+	public static final String WORK = "workPhoneNumber";
+	public static final String PHOTOID = "photoId";
+	public static final String PHOTO_URI= "photoUri";
+	
 	private long id;
     private String displayName;
     private String homePhoneNumber;
